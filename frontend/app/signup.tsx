@@ -27,7 +27,6 @@ export default function SignUp() {
     const handleSignUp = async () => {
         console.log('Starting sign up process...');
         
-        // Validation
         if (password !== confirmPassword) {
             Alert.alert('Error', 'Passwords do not match');
             return;
@@ -47,7 +46,7 @@ export default function SignUp() {
             const timeoutId = setTimeout(() => {
                 console.log('Request timed out after 15 seconds');
                 controller.abort();
-            }, 15000); // Increased to 15 seconds
+            }, 15000); 
 
             const response = await fetch(`${API_URL}/api/users/register`, {
                 method: 'POST',

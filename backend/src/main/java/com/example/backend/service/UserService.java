@@ -6,7 +6,7 @@ import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.example.backend.dto.LoginRequest;
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -36,5 +36,17 @@ public class UserService {
 
     public boolean verifyPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public User signinUser(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + request.getEmail()));
+
+        if (!verifyPassword(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        user.setPassword(null);
+        return user;
     }
 }
